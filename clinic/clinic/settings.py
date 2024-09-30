@@ -131,3 +131,9 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#Redirect to login page if user is not logged in
+LOGIN_URL = 'login'
+
+# Redirect to home page after login
+LOGIN_REDIRECT_URL = 'home'

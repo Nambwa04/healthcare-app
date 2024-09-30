@@ -1,4 +1,4 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html>
 
@@ -63,7 +63,7 @@
                 <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}"> About</a>
+                <a class="nav-link" href="{% url 'appointment' %}"> Make an Appointment</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'departments' %}">Departments</a>
@@ -72,16 +72,16 @@
                 <a class="nav-link" href="{% url 'doctors'%}">Doctors</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
+                <a class="nav-link" href="{% url 'video_conference' %}">Meeting</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Make an Appointment</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'register' %}">Register</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'login' %}">Login</a>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'contact' %}">Contact Us</a>
+                <a class="dropdown-item" href="{% url 'register' %}">Register</a>
+                <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+                <a class="dropdown-item" href="{% url 'about' %}">About</a>
+                </div>
               </li>
               <form class="form-inline">
                 <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
