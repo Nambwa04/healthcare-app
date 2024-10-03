@@ -56,8 +56,8 @@
     </style>
 </head>
 <body>
-    <h2>Register Doctor</h2>
     <form method="POST">
+        <h2>Register Doctor</h2>
         {% csrf_token %}
         {{ user_form.as_div }}
         {{ doctor_form.as_div }}
