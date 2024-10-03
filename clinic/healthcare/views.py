@@ -1,28 +1,52 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.urls import reverse
 from django.contrib import messages
-from django.core.mail import send_mail
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from .forms import AppointmentForm, UserForm, DoctorForm, PatientForm
 
 # Create your views here.
-def register(request):
-    if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        email = request.POST["email"]
 
-        if User.objects.filter(email=email).exists():
-            messages.error(request, "Email already exists.")
-
-        else:
-            user = User.objects.create_user(username=username, password=password, email=email)
+def register_doctor(request):
+    if request.method == 'POST':
+        user_form = UserForm(request.POST)
+        doctor_form = DoctorForm(request.POST)
+        if user_form.is_valid() and doctor_form.is_valid():
+            user = user_form.save(commit=False)
+            user.set_password(user_form.cleaned_data['password'])
             user.save()
-            messages.success(request, "Account created successfully.")
-            return redirect('login')
+            doctor = doctor_form.save(commit=False)
+            doctor.user = user
+            doctor.save()
+            login(request, user)
+            messages.success(request, 'Doctor registration successful.')
+            return redirect('home')
         
-    return render(request, 'register.html', {})
+    else:
+        user_form = UserForm()
+        doctor_form = DoctorForm()
+        return render(request, 'register_doctor.html', {'user_form': user_form, 'doctor_form': doctor_form})
+    
+def register_patient(request):
+    if request.method == 'POST':
+        user_form = UserForm(request.POST)
+        patient_form = PatientForm(request.POST)
+        if user_form.is_valid() and patient_form.is_valid():
+            user = user_form.save(commit=False)
+            user.set_password(user_form.cleaned_data['password'])
+            user.save()
+            patient = patient_form.save(commit=False)
+            patient.user = user
+            patient.save()
+            login(request, user)
+            messages.success(request, 'Patient registration successful.')
+            return redirect(reverse('login'))
+    else:
+            user_form = UserForm()
+            patient_form = PatientForm()
+    return render(request, 'register_patient.html', {'user_form': user_form, 'patient_form': patient_form})
 
 def login_user(request):
     if request.method == "POST":
@@ -38,8 +62,9 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
-            messages.success(request, "Login successful.")
-            return redirect('home')
+            if request.user.is_authenticated:
+                messages.success(request, "Login successful.")
+                return redirect('home')
         else:
             messages.error(request, "Invalid credentials.")
             return redirect('login')
@@ -84,18 +109,14 @@ def doctors(request):
 
 def appointment(request):
     if request.method == 'POST':
-        FullName = request.POST.get('FullName', '')
-        Phone = request.POST.get('Phone', '')
-        Email = request.POST.get('Email', '')
-        Date = request.POST.get('Date', '')
-        Time = request.POST.get('Time', '')
-        Department = request.POST.get('Department', '')
-        Doctor = request.POST.get('Doctor', '')
-        Message = request.POST.get('Message', '')
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('Thank you for booking an appointment with us!')
 
-        return HttpResponse('Thank you for booking an appointment with us!')
-    
-    return render(request, 'appointment.html', {})
+    else:
+        form = AppointmentForm()
+        return render(request, 'appointment.html', {'form': form})
 
 def video_conference(request):
     return render(request, 'video_conference.html', {})

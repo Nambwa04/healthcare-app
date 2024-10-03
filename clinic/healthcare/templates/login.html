@@ -73,6 +73,7 @@
             <label for="password">Password</label>
             <input type="password" name="password" id="password" required>
             <button type="submit">Login</button>
+            <p>Don't have an account? <a href="{% url 'register_patient' %}">Register</a></p>
         </form>
         <div class="messages">
             {% for message in messages %}
